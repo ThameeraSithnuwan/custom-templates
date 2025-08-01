@@ -1,6 +1,5 @@
 name: test-a3b1ad9_custom_app_7dd73e2 Pipeline (Skyu Generated)
 'on':
-  push: []
   workflow_dispatch: {}
   repository_dispatch:
     types: pipeline_1c8e87a2-8287-47e1-88ae-dd3e3fcf71f7
