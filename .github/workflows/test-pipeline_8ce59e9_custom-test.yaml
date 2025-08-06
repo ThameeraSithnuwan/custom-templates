@@ -197,13 +197,6 @@ jobs:
                 
       - name: Launch Template Starts Status [LAUNCH_TEMPLATE] [STARTED]
         run: >-
-          echo "##################################################################"
-          echo ${{ env.CLOUD_REGION }}
-          echo ${{ env.ROLE_ARN }}
-          echo ${{ env.PIPELINE_ORGANIZATION_ID }}
-          echo ${{ env.PIPELINE_PROJECT_ID }}
-          echo ${{ env.PIPELINE_CREDENTIAL_ID }}
-          echo "##################################################################"
           curl --location --request POST '${{ env.PIPELINE_SERVICE_EP
           }}/infrastructure-service/infrastructure/${{
           env.PIPELINE_APPLICATION_ID
@@ -215,8 +208,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ${{ env.CLOUD_REGION }}
-          role-to-assume: ${{ env.ROLE_ARN }}
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::678356101643:role/custm-infra-arn
       - name: Create Credentials File
         run: >-
           mkdir $HOME/.aws/ && touch $HOME/.aws/credentials && echo "[default]"
@@ -365,10 +358,6 @@ jobs:
                 
       - name: Launch Template Starts Status [LAUNCH_TEMPLATE] [STARTED]
         run: >-
-          echo "##################################################################"
-          echo ${{ env.CLOUD_REGION }}
-          echo ${{ env.ROLE_ARN }}
-          echo "##################################################################"
           curl --location --request POST '${{ env.PIPELINE_SERVICE_EP
           }}/infrastructure-service/infrastructure/${{
           env.PIPELINE_APPLICATION_ID
