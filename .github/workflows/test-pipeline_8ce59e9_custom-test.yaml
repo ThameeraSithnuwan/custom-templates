@@ -370,8 +370,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ${{ env.CLOUD_REGION }}
-          role-to-assume: ${{ env.ROLE_ARN }}
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::678356101643:role/custm-infra-arn
       - name: Create Credentials File
         run: >-
           mkdir $HOME/.aws/ && touch $HOME/.aws/credentials && echo "[default]"
@@ -399,8 +399,8 @@ jobs:
           env.PIPELINE_CREDENTIAL_ID }}" --header "Authorization: Bearer ${{
           env.SERVICE_ACC_ACCESS_TOKEN_STRIPPED }}"
       - name: Terraform Init
-        working-directory: infra-folder
-        run: 'terraform init '
+        working-directory: ./
+        run: terraform init
       - name: Push Terraform Status [INIT] [FAILED]
         run: >-
           curl --location --request POST '${{ env.PIPELINE_SERVICE_EP
@@ -435,7 +435,7 @@ jobs:
           "x-credential-id: ${{ env.PIPELINE_CREDENTIAL_ID }}" --header
           "Authorization: Bearer ${{ env.SERVICE_ACC_ACCESS_TOKEN_STRIPPED }}"
       - name: Terraform Apply
-        working-directory: infra-folder
+        working-directory: ./
         run: terraform apply  -auto-approve
       - name: Push Terraform Status [APPLY] [FAILED]
         run: >-
@@ -449,7 +449,7 @@ jobs:
           env.SERVICE_ACC_ACCESS_TOKEN_STRIPPED }}"
         if: failure()
       - name: Push Terraform Status [APPLY] [SUCCESS]
-        working-directory: infra-folder
+        working-directory: ./
         run: >-
           TERRAFORM_OUTPUT=$(terraform output --json) && curl --location
           --request POST "${{ env.PIPELINE_SERVICE_EP
