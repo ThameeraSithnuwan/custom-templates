@@ -200,6 +200,9 @@ jobs:
           echo "##################################################################"
           echo ${{ env.CLOUD_REGION }}
           echo ${{ env.ROLE_ARN }}
+          echo ${{ env.PIPELINE_ORGANIZATION_ID }}
+          echo ${{ env.PIPELINE_PROJECT_ID }}
+          echo ${{ env.PIPELINE_CREDENTIAL_ID }}
           echo "##################################################################"
           curl --location --request POST '${{ env.PIPELINE_SERVICE_EP
           }}/infrastructure-service/infrastructure/${{
