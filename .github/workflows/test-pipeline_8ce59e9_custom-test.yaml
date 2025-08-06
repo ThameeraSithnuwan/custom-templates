@@ -237,7 +237,7 @@ jobs:
           env.PIPELINE_CREDENTIAL_ID }}" --header "Authorization: Bearer ${{
           env.SERVICE_ACC_ACCESS_TOKEN_STRIPPED }}"
       - name: Terraform Init
-        working-directory: infra-folder
+        working-directory: ./
         run: terraform init
       - name: Push Terraform Status [INIT] [FAILED]
         run: >-
@@ -274,7 +274,7 @@ jobs:
           env.PIPELINE_CREDENTIAL_ID }}" --header "Authorization: Bearer ${{
           env.SERVICE_ACC_ACCESS_TOKEN_STRIPPED }}"
       - name: Terraform Plan
-        working-directory: infra-folder
+        working-directory: ./
         run: terraform plan
       - name: tfsec
         uses: aquasecurity/tfsec-pr-commenter-action@v1.2.0
