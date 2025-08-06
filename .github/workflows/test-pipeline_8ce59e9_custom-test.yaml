@@ -197,6 +197,10 @@ jobs:
                 
       - name: Launch Template Starts Status [LAUNCH_TEMPLATE] [STARTED]
         run: >-
+          echo "##################################################################"
+          echo ${{ env.CLOUD_REGION }}
+          echo ${{ env.ROLE_ARN }}
+          echo "##################################################################"
           curl --location --request POST '${{ env.PIPELINE_SERVICE_EP
           }}/infrastructure-service/infrastructure/${{
           env.PIPELINE_APPLICATION_ID
