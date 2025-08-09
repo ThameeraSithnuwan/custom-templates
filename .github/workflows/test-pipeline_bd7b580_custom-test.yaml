@@ -4,6 +4,11 @@ name: test-pipeline_bd7b580_custom-test Pipeline (Skyu Generated)
   repository_dispatch:
     types: pipeline_7a7a41a6-2294-4aa7-92b8-ccbd8306f35c
 env:
+  CLOUD_REGION: us-east-1
+  ROLE_ARN: arn:aws:iam::678356101643:role/custm-infra-arn
+  WORKING_DIRECTORY: infra/prod
+  VAR_FILE: terraform.tfvars
+  TARGET_BRANCH: main
   ENCODED_PIPELINE_SECRET: ${{secrets.CUSTOMTEMPLATES_TESTPIPELINE_BD7B580_CUSTOMTEST}}
   COMMIT_ID: ${{github.event.client_payload.commitId || github.sha || github.run_id}}
   BRANCH_NAME: >-
