@@ -332,9 +332,9 @@ jobs:
         run: terraform init
       - name: "[SLEEP]"
         run: sleep 3
-      - name: Terraform Apply
-        working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: terraform apply  -auto-approve -var-file=${{ env.VAR_FILE }}
+      # - name: Terraform Apply
+      #   working-directory: ${{ env.WORKING_DIRECTORY }}
+      #   run: terraform apply  -auto-approve -var-file=${{ env.VAR_FILE }}
       - name: Delete Infra Branch
         run: >-
           curl --location --request DELETE '${{ env.PIPELINE_SERVICE_EP
