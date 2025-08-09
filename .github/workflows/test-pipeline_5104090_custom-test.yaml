@@ -159,7 +159,8 @@ jobs:
   plan:
     name: plan
     outputs:
-      can_proceed: ${{ steps.evaluate_condition.outputs.can_proceed }}
+      is_pr_merged: ${{ steps.evaluate_conditions.outputs.is_pr_merged }}
+      is_branch_match: ${{ steps.evaluate_conditions.outputs.is_branch_match }}
     steps:
       - name: "Run :: Start"
         run: |2-
@@ -242,14 +243,18 @@ jobs:
         with:
           github_token: ${{ secrets.PAT_TOKEN }}
       - name: Evaluate PR merged or branch match condition
-        id: evaluate_condition
+        id: evaluate_conditions
         run: >-
           if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.event.pull_request.merged }}" == "true" ]]; then
-            echo "can_proceed=true" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.ref }}" == "refs/heads/${{ env.TARGET_BRANCH }}" ]]; then
-            echo "can_proceed=true" >> $GITHUB_OUTPUT
+            echo "is_pr_merged=true" >> $GITHUB_OUTPUT
           else
-            echo "can_proceed=false" >> $GITHUB_OUTPUT
+            echo "is_pr_merged=false" >> $GITHUB_OUTPUT
+          fi
+
+          if [[ "${{ github.ref }}" == "refs/heads/${{ env.TARGET_BRANCH }}" ]]; then
+            echo "is_branch_match=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_branch_match=false" >> $GITHUB_OUTPUT
           fi
     needs:
       - _status_testing
@@ -335,6 +340,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: terraform apply  -auto-approve -var-file=${{ env.VAR_FILE }}
       - name: Delete Infra Branch
+        if: needs.check_condition.outputs.is_pr_merged == 'true'
         run: >-
           curl --location --request DELETE '${{ env.PIPELINE_SERVICE_EP
           }}/infrastructure-service/infrastructure/branch/${{
@@ -347,7 +353,7 @@ jobs:
       - plan
       - _status_testing
     permissions: write-all
-    if: needs.plan.outputs.can_proceed == 'true'
+    if: needs.plan.outputs.is_pr_merged == 'true' || needs.plan.outputs.is_branch_match == 'true'
     runs-on: ubuntu-latest
   _status-success:
     name: _status-success
