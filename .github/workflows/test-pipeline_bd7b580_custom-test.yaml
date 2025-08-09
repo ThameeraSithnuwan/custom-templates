@@ -6,7 +6,6 @@ name: test-pipeline_bd7b580_custom-test Pipeline (Skyu Generated)
     types:
       - opened
       - synchronize
-      - closed
   push:
     branches:
       - main
@@ -244,12 +243,6 @@ jobs:
           github_token: ${{ secrets.PAT_TOKEN }}
       - name: Evaluate PR merged or branch match condition
         run: >-
-          if [[ "${{ github.event.pull_request.merged }}" == "true" ]]; then
-            echo "is_pr_merged=true" >> $GITHUB_OUTPUT
-          else
-            echo "is_pr_merged=false" >> $GITHUB_OUTPUT
-          fi
-
           if [[ "${{ github.ref }}" == "refs/heads/${{ env.TARGET_BRANCH }}" ]];
           then
             echo "is_branch_match=true" >> $GITHUB_OUTPUT
@@ -260,7 +253,6 @@ jobs:
     needs:
       - _status_testing
     outputs:
-      is_pr_merged: ${{ steps.evaluate_conditions.outputs.is_pr_merged }}
       is_branch_match: ${{ steps.evaluate_conditions.outputs.is_branch_match }}
     permissions: write-all
     runs-on: ubuntu-latest
@@ -340,9 +332,9 @@ jobs:
         run: terraform init
       - name: "[SLEEP]"
         run: sleep 3
-      # - name: Terraform Apply
-      #   working-directory: ${{ env.WORKING_DIRECTORY }}
-      #   run: terraform apply  -auto-approve -var-file=${{ env.VAR_FILE }}
+      - name: Terraform Apply
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: terraform apply  -auto-approve -var-file=${{ env.VAR_FILE }}
       - name: Delete Infra Branch
         run: >-
           curl --location --request DELETE '${{ env.PIPELINE_SERVICE_EP
@@ -352,13 +344,13 @@ jobs:
           "x-project-id: ${{ env.PIPELINE_PROJECT_ID }}" --header
           "x-credential-id: ${{ env.PIPELINE_CREDENTIAL_ID }}" --header
           "Authorization: Bearer ${{ env.SERVICE_ACC_ACCESS_TOKEN_STRIPPED }}"
-        if: needs.check_conditions.outputs.is_pr_merged == 'true'
+        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
     needs:
       - plan
       - _status_testing
     permissions: write-all
     if: >-
-      needs.plan.outputs.is_pr_merged == 'true' ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true) ||
       needs.plan.outputs.is_branch_match == 'true'
     runs-on: ubuntu-latest
   _status-success:
