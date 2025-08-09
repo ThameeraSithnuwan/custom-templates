@@ -243,7 +243,7 @@ jobs:
         with:
           github_token: ${{ secrets.PAT_TOKEN }}
       - name: Evaluate PR merged or branch match condition
-        id: evaluate_condition
+        id: evaluate_conditions
         run: >-
           if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.event.pull_request.merged }}" == "true" ]]; then
             echo "is_pr_merged=true" >> $GITHUB_OUTPUT
