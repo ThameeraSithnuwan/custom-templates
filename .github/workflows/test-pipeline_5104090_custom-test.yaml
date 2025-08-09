@@ -198,10 +198,13 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ${{ env.CLOUD_REGION }}
-          role-to-assume: ${{ env.ROLE_ARN }}
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::678356101643:role/custm-infra-arn
       - name: Create Credentials File
         run: >-
+          echo "${{env.AWS_ACCESS_KEY_ID}}"
+          echo "${{env.AWS_SECRET_ACCESS_KEY}}"
+          echo "${{env.AWS_SESSION_TOKEN}}"
           mkdir $HOME/.aws/ && touch $HOME/.aws/credentials && echo "[default]"
           > $HOME/.aws/credentials && echo
           "aws_access_key_id=${{env.AWS_ACCESS_KEY_ID}}" >>
@@ -285,8 +288,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ${{ env.CLOUD_REGION }}
-          role-to-assume: ${{ env.ROLE_ARN }}
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::678356101643:role/custm-infra-arn
       - name: Create Credentials File
         run: >-
           mkdir $HOME/.aws/ && touch $HOME/.aws/credentials && echo "[default]"
