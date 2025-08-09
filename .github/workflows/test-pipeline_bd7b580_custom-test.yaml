@@ -1,12 +1,21 @@
 name: test-pipeline_bd7b580_custom-test Pipeline (Skyu Generated)
-'on':
+"on":
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+  push:
+    branches:
+      - main
   workflow_dispatch: {}
   repository_dispatch:
     types: pipeline_7a7a41a6-2294-4aa7-92b8-ccbd8306f35c
 env:
   CLOUD_REGION: us-east-1
   ROLE_ARN: arn:aws:iam::678356101643:role/custm-infra-arn
-  WORKING_DIRECTORY: infra/dev
+  WORKING_DIRECTORY: infra/staging
   VAR_FILE: terraform.tfvars
   TARGET_BRANCH: main
   ENCODED_PIPELINE_SECRET: ${{secrets.CUSTOMTEMPLATES_TESTPIPELINE_BD7B580_CUSTOMTEST}}
@@ -18,17 +27,17 @@ jobs:
   _status-pending:
     name: _status-pending
     steps:
-      - name: 'Run :: Start'
+      - name: "Run :: Start"
         run: |2-
 
               echo " Starting GitHub Action!" && 
               echo "STEPS_CAN_PROCEED=true" >> $GITHUB_ENV
-              
-      - name: 'Run :: Checkout repository'
+
+      - name: "Run :: Checkout repository"
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: 'Run :: Checkout Specific Commit'
+      - name: "Run :: Checkout Specific Commit"
         env:
           COMMIT_ID: ${{ github.event.client_payload.commitId }}
           BRANCH_NAME: ${{ github.event.client_payload.branchName }}
@@ -55,8 +64,8 @@ jobs:
               else
                 echo "Skipping checkout..."
               fi
-            
-      - name: 'Run :: Decoding Secrets'
+
+      - name: "Run :: Decoding Secrets"
         run: |2-
 
                 if [ ! -x "$(command -v jq)" ]; then
@@ -65,12 +74,12 @@ jobs:
                   sudo apt-get install -y jq
                 fi
                 echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
-                
-      - name: 'Run :: Checkout repository'
+
+      - name: "Run :: Checkout repository"
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: 'Run :: Pipeline Started'
+      - name: "Run :: Pipeline Started"
         env:
           RUN_ID: ${{ github.run_id }}
         run: |2-
@@ -82,7 +91,7 @@ jobs:
               else
                 echo "FAILED :: $response"
               fi
-              
+
     needs: []
     permissions: write-all
     env:
@@ -91,17 +100,17 @@ jobs:
   _status_testing:
     name: _status_testing
     steps:
-      - name: 'Run :: Start'
+      - name: "Run :: Start"
         run: |2-
 
               echo " Starting GitHub Action!" && 
               echo "STEPS_CAN_PROCEED=true" >> $GITHUB_ENV
-              
-      - name: 'Run :: Checkout repository'
+
+      - name: "Run :: Checkout repository"
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: 'Run :: Checkout Specific Commit'
+      - name: "Run :: Checkout Specific Commit"
         env:
           COMMIT_ID: ${{ github.event.client_payload.commitId }}
           BRANCH_NAME: ${{ github.event.client_payload.branchName }}
@@ -128,8 +137,8 @@ jobs:
               else
                 echo "Skipping checkout..."
               fi
-            
-      - name: 'Run :: Decoding Secrets'
+
+      - name: "Run :: Decoding Secrets"
         run: |2-
 
                 if [ ! -x "$(command -v jq)" ]; then
@@ -138,13 +147,13 @@ jobs:
                   sudo apt-get install -y jq
                 fi
                 echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
-                
-      - name: 'Run :: Pipeline Testing'
+
+      - name: "Run :: Pipeline Testing"
         run: |2-
 
               # NOTE: Do not remove this job even if you don't have tests at the moment.
               echo "Hello Tests from SkyU"
-              
+
     needs:
       - _status-pending
     permissions: write-all
@@ -152,17 +161,17 @@ jobs:
   plan:
     name: plan
     steps:
-      - name: 'Run :: Start'
+      - name: "Run :: Start"
         run: |2-
 
               echo " Starting GitHub Action!" && 
               echo "STEPS_CAN_PROCEED=true" >> $GITHUB_ENV
-              
-      - name: 'Run :: Checkout repository'
+
+      - name: "Run :: Checkout repository"
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: 'Run :: Checkout Specific Commit'
+      - name: "Run :: Checkout Specific Commit"
         env:
           COMMIT_ID: ${{ github.event.client_payload.commitId }}
           BRANCH_NAME: ${{ github.event.client_payload.branchName }}
@@ -189,8 +198,8 @@ jobs:
               else
                 echo "Skipping checkout..."
               fi
-            
-      - name: 'Run :: Decoding Secrets'
+
+      - name: "Run :: Decoding Secrets"
         run: |2-
 
                 if [ ! -x "$(command -v jq)" ]; then
@@ -199,7 +208,7 @@ jobs:
                   sudo apt-get install -y jq
                 fi
                 echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
-                
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -223,7 +232,7 @@ jobs:
       - name: Terraform Init
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: terraform init
-      - name: '[SLEEP]'
+      - name: "[SLEEP]"
         run: sleep 3
       - name: Terraform Plan
         working-directory: ${{ env.WORKING_DIRECTORY }}
@@ -257,17 +266,17 @@ jobs:
   apply:
     name: apply
     steps:
-      - name: 'Run :: Start'
+      - name: "Run :: Start"
         run: |2-
 
               echo " Starting GitHub Action!" && 
               echo "STEPS_CAN_PROCEED=true" >> $GITHUB_ENV
-              
-      - name: 'Run :: Checkout repository'
+
+      - name: "Run :: Checkout repository"
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: 'Run :: Checkout Specific Commit'
+      - name: "Run :: Checkout Specific Commit"
         env:
           COMMIT_ID: ${{ github.event.client_payload.commitId }}
           BRANCH_NAME: ${{ github.event.client_payload.branchName }}
@@ -294,8 +303,8 @@ jobs:
               else
                 echo "Skipping checkout..."
               fi
-            
-      - name: 'Run :: Decoding Secrets'
+
+      - name: "Run :: Decoding Secrets"
         run: |2-
 
                 if [ ! -x "$(command -v jq)" ]; then
@@ -304,7 +313,7 @@ jobs:
                   sudo apt-get install -y jq
                 fi
                 echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
-                
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -328,7 +337,7 @@ jobs:
       - name: Terraform Init
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: terraform init
-      - name: '[SLEEP]'
+      - name: "[SLEEP]"
         run: sleep 3
       - name: Terraform Apply
         working-directory: ${{ env.WORKING_DIRECTORY }}
@@ -354,17 +363,17 @@ jobs:
   _status-success:
     name: _status-success
     steps:
-      - name: 'Run :: Start'
+      - name: "Run :: Start"
         run: |2-
 
               echo " Starting GitHub Action!" && 
               echo "STEPS_CAN_PROCEED=true" >> $GITHUB_ENV
-              
-      - name: 'Run :: Checkout repository'
+
+      - name: "Run :: Checkout repository"
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: 'Run :: Checkout Specific Commit'
+      - name: "Run :: Checkout Specific Commit"
         env:
           COMMIT_ID: ${{ github.event.client_payload.commitId }}
           BRANCH_NAME: ${{ github.event.client_payload.branchName }}
@@ -391,8 +400,8 @@ jobs:
               else
                 echo "Skipping checkout..."
               fi
-            
-      - name: 'Run :: Decoding Secrets'
+
+      - name: "Run :: Decoding Secrets"
         run: |2-
 
                 if [ ! -x "$(command -v jq)" ]; then
@@ -401,15 +410,15 @@ jobs:
                   sudo apt-get install -y jq
                 fi
                 echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
-                
-      - name: 'Run :: Pipeline Success'
+
+      - name: "Run :: Pipeline Success"
         env:
           RUN_ID: ${{ github.run_id }}
         run: |2-
 
               context=$(echo "$CONTEXT_JSON" | jq --arg sha "$COMMIT_ID" '.sha = $sha' | jq -c . | base64)
               response=$(curl -X PUT -d "runId=$RUN_ID&context=$context&appId=${{ github.event.client_payload.externalRepo.appId }}"  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.PIPELINE_SERVICE_EP }}/${{ env.PIPELINE_ID }}/SUCCESS?releaseId=${{ github.event.client_payload.releaseData.releaseId }}")
-              
+
     needs:
       - _status_testing
       - plan
@@ -422,7 +431,7 @@ jobs:
   _status-failed:
     name: _status-failed
     steps:
-      - name: 'Run :: Decoding Secrets'
+      - name: "Run :: Decoding Secrets"
         run: |2-
 
                 if [ ! -x "$(command -v jq)" ]; then
@@ -431,8 +440,8 @@ jobs:
                   sudo apt-get install -y jq
                 fi
                 echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
-                
-      - name: 'Run :: Pipeline Failed'
+
+      - name: "Run :: Pipeline Failed"
         env:
           RUN_ID: ${{ github.run_id }}
         run: |2-
@@ -448,7 +457,7 @@ jobs:
               else
                 echo "FAILED :: $response"
               fi
-              
+
     needs:
       - _status_testing
       - plan
