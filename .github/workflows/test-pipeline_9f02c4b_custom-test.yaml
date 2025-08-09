@@ -4,6 +4,9 @@ name: test-pipeline_9f02c4b_custom-test Pipeline (Skyu Generated)
   repository_dispatch:
     types: pipeline_467dc3dd-460c-4505-bb74-4f0af1ff45a8
 env:
+  WORKING_DIRECTORY: infra/prod
+  VAR_FILE: terraform.tfvars
+  TARGET_BRANCH: main
   ENCODED_PIPELINE_SECRET: ${{secrets.CUSTOMTEMPLATES_TESTPIPELINE_9F02C4B_CUSTOMTEST}}
   COMMIT_ID: ${{github.event.client_payload.commitId || github.sha || github.run_id}}
   BRANCH_NAME: >-
