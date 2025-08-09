@@ -1,10 +1,19 @@
 name: test-pipeline_5104090_custom-test Pipeline (Skyu Generated)
 "on":
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+  push:
+    branches:
+      - main
   workflow_dispatch: {}
   repository_dispatch:
     types: pipeline_bc640088-506d-45e0-a6c0-f7f4e79c7f0e
 env:
-  WORKING_DIRECTORY: infra/staging
+  WORKING_DIRECTORY: infra/prod
   VAR_FILE: terraform.tfvars
   ENCODED_PIPELINE_SECRET: ${{secrets.CUSTOMTEMPLATES_TESTPIPELINE_5104090_CUSTOMTEST}}
   COMMIT_ID: ${{github.event.client_payload.commitId || github.sha || github.run_id}}
