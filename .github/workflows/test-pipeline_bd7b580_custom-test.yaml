@@ -6,7 +6,6 @@ name: test-pipeline_bd7b580_custom-test Pipeline (Skyu Generated)
     types:
       - opened
       - synchronize
-      - closed
   push:
     branches:
       - main
