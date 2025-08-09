@@ -6,9 +6,15 @@ name: test-pipeline_bd7b580_custom-test Pipeline (Skyu Generated)
     types:
       - opened
       - synchronize
+      - closed
   push:
     branches:
       - main
+    paths-ignore:
+      - .github/workflows/**
+      - .trivyignore
+      - Readme.md
+      - README.md
   workflow_dispatch: {}
   repository_dispatch:
     types: pipeline_7a7a41a6-2294-4aa7-92b8-ccbd8306f35c
