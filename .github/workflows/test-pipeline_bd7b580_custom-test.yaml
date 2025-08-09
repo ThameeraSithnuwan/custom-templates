@@ -6,7 +6,7 @@ name: test-pipeline_bd7b580_custom-test Pipeline (Skyu Generated)
 env:
   CLOUD_REGION: us-east-1
   ROLE_ARN: arn:aws:iam::678356101643:role/custm-infra-arn
-  WORKING_DIRECTORY: infra/prod
+  WORKING_DIRECTORY: infra/dev
   VAR_FILE: terraform.tfvars
   TARGET_BRANCH: main
   ENCODED_PIPELINE_SECRET: ${{secrets.CUSTOMTEMPLATES_TESTPIPELINE_BD7B580_CUSTOMTEST}}
