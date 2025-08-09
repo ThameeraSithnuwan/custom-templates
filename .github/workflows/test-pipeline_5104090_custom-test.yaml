@@ -241,7 +241,6 @@ jobs:
         uses: aquasecurity/tfsec-pr-commenter-action@v1.2.0
         with:
           github_token: ${{ secrets.PAT_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Evaluate PR merged or branch match condition
         id: evaluate_condition
         run: >-
@@ -251,7 +250,7 @@ jobs:
             echo "can_proceed=true" >> $GITHUB_OUTPUT
           else
             echo "can_proceed=false" >> $GITHUB_OUTPUT
-          fi          
+          fi
     needs:
       - _status_testing
     permissions: write-all
