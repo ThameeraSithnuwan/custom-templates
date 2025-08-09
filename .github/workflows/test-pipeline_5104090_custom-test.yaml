@@ -222,11 +222,11 @@ jobs:
         run: sleep 3
       - name: Terraform Plan
         working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: terraform plan
+        run: terraform plan -var-file=${{ env.VAR_FILE }}
       - name: tfsec
         uses: aquasecurity/tfsec-pr-commenter-action@v1.2.0
         with:
-          github_token: ${{ env.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PAT_TOKEN }}
     needs:
       - _status_testing
     permissions: write-all
@@ -304,12 +304,12 @@ jobs:
           terraform_wrapper: false
       - name: Terraform Init
         working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: 'terraform init '
+        run: terraform init
       - name: '[SLEEP]'
         run: sleep 3
       - name: Terraform Apply
         working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: terraform apply  -auto-approve
+        run: terraform apply  -auto-approve -var-file=${{ env.VAR_FILE }}
       - name: Delete Infra Branch
         run: >-
           curl --location --request DELETE '${{ env.PIPELINE_SERVICE_EP
