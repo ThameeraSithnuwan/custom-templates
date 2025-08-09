@@ -1,9 +1,29 @@
 name: test-pipeline_b571c23_custom-test Pipeline (Skyu Generated)
 'on':
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - closed
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - .github/workflows/**
+      - .trivyignore
+      - Readme.md
+      - README.md
   workflow_dispatch: {}
   repository_dispatch:
     types: pipeline_37fc6d50-a556-4ddb-9294-2590f066a839
 env:
+  CLOUD_REGION: us-east-1
+  ROLE_ARN: arn:aws:iam::678356101643:role/custm-infra-arn
+  WORKING_DIRECTORY: infra/staging
+  VAR_FILE: terraform.tfvars
+  TARGET_BRANCH: main
   ENCODED_PIPELINE_SECRET: ${{secrets.CUSTOMTEMPLATES_TESTPIPELINE_B571C23_CUSTOMTEST}}
   COMMIT_ID: ${{github.event.client_payload.commitId || github.sha || github.run_id}}
   BRANCH_NAME: >-
