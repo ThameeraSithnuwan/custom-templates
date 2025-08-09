@@ -4,6 +4,11 @@ name: pipeline-f8ef7a3_skyu-custom Pipeline (Skyu Generated)
   repository_dispatch:
     types: pipeline_eda433b2-3bac-48e3-b250-8f474e545146
 env:
+  CLOUD_REGION: us-east-1
+  ROLE_ARN: arn:aws:iam::678356101643:role/custm-infra-arn
+  WORKING_DIRECTORY: infra/prod
+  VAR_FILE: terraform.tfvars
+  TARGET_BRANCH: main
   ENCODED_PIPELINE_SECRET: ${{secrets.CUSTOMTEMPLATES_PIPELINEF8EF7A3_SKYUCUSTOM}}
   COMMIT_ID: ${{github.event.client_payload.commitId || github.sha || github.run_id}}
   BRANCH_NAME: >-
