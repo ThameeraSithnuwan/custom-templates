@@ -6,7 +6,7 @@ name: job_pr-default_app_a608fab Pipeline (Skyu Generated)
       - synchronize
   workflow_dispatch: {}
   repository_dispatch:
-    types: pipeline_b088fa8d-d079-4017-85d3-24dab4a51252
+    types: pipeline_981aedc8-823d-49d5-8ec0-8169526d53ae
 env:
   ENCODED_PIPELINE_SECRET: ${{secrets.CUSTOMTEMPLATES_JOB_PRDEFAULT_APP_A608FAB}}
   COMMIT_ID: ${{github.event.client_payload.commitId || github.sha || github.run_id}}
